@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kgc.mapper.QualityMapper">
+    <select id="getAll" resultType="com.kgc.pojo.Quality">
+        SELECT q.*,d.name
+        FROM  air_quality_index AS q
+        INNER JOIN district  AS d
+        ON q.districtId=d.id
+        <where>
+            <if test="districtId!=-1  ">
+                districtId=#{districtId}
+            </if>
+        </where>
+    </select>
+    <select id="getByteId" resultType="com.kgc.pojo.Quality">
+        select * from air_quality_index where id=#{id}
+    </select>
+    <insert id="add" parameterType="com.kgc.pojo.Quality">
+         INSERT INTO air_quality_index(districtId,monitorTime,pm10,pm25,monitoringStation,lastModifyTime)
+         VALUES(#{districtId},#{monitorTime},#{pm10},#{pm25},#{monitoringStation},now())
+    </insert>
+    <update id="update" parameterType="com.kgc.pojo.Quality">
+        UPDATE air_quality_index
+         SET districtId=#{districtId},monitorTime=#{monitorTime},pm10=#{pm10},pm25=#{pm25},monitoringStation=#{monitoringStation},lastModifyTime=now()
+         WHERE id=#{id}
+    </update>
+    <delete id="delete" parameterType="com.kgc.pojo.Quality">
+        delete from air_quality_index where id=#{id}
+    </delete>
+</mapper>
